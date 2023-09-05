@@ -22,11 +22,11 @@ public class DegreeEntity {
     public DegreeEntity() {
     }
 
-    public Integer getDegreeIdId() {
+    public Integer getDegreeId() {
         return degreeId;
     }
 
-    public void setDegreeIdId(Integer degreeId) {
+    public void setDegreeId(Integer degreeId) {
         this.degreeId = degreeId;
     }
 
