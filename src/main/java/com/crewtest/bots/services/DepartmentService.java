@@ -2,7 +2,9 @@ package com.crewtest.bots.services;
 
 import com.crewtest.bots.entities.DepartmentEntity;
 import com.crewtest.bots.entities.LectorEntity;
+import com.crewtest.bots.exeption.AbsentDepartmentException;
 import com.crewtest.bots.repositories.DepartmentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
@@ -20,12 +23,21 @@ public class DepartmentService {
         this.departmentRepository = departmentRepository;
     }
 
-    private DepartmentEntity findDepartmentByName(String departmentName) {
-        return departmentRepository.findDepartmentEntityByDepartmentName(departmentName);
+    private DepartmentEntity findDepartmentByName(String departmentName) throws AbsentDepartmentException {
+        DepartmentEntity departmentEntity = departmentRepository.findDepartmentEntityByDepartmentName(departmentName);
+        if (departmentEntity == null){
+            throw new AbsentDepartmentException("No such department");
+        }
+        return departmentEntity;
     }
 
     public String findHeadNameOfDepartment(String departmentName) {
-        DepartmentEntity department = findDepartmentByName(departmentName);
+        DepartmentEntity department = null;
+        try {
+            department = findDepartmentByName(departmentName);
+        } catch (AbsentDepartmentException e) {
+            log.error(e.getMessage());
+        }
         if (department != null){
             return department.getHeadOfDepartmentName();
         }
@@ -34,7 +46,12 @@ public class DepartmentService {
 
     @Transactional(propagation=Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public Map<String, Long> showNumberOfLectorsForEachDegree(String departmentName) {
-        DepartmentEntity department = findDepartmentByName(departmentName);
+        DepartmentEntity department = null;
+        try {
+            department = findDepartmentByName(departmentName);
+        } catch (AbsentDepartmentException e) {
+            log.error(e.getMessage());
+        }
         if (department == null){
             return null;
         }
@@ -47,7 +64,12 @@ public class DepartmentService {
 
     @Transactional(propagation=Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public double countAverageSalaryForDepartment(String departmentName) {
-        DepartmentEntity department = findDepartmentByName(departmentName);
+        DepartmentEntity department = null;
+        try {
+            department = findDepartmentByName(departmentName);
+        } catch (AbsentDepartmentException e) {
+            log.error(e.getMessage());
+        }
         if (department == null){
             return 0;
         }
@@ -61,7 +83,12 @@ public class DepartmentService {
 
     @Transactional(propagation=Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public int countNumberOfLectorsForDepartment(String departmentName) {
-        DepartmentEntity department = findDepartmentByName(departmentName);
+        DepartmentEntity department = null;
+        try {
+            department = findDepartmentByName(departmentName);
+        } catch (AbsentDepartmentException e) {
+            log.error(e.getMessage());
+        }
         if (department == null){
             return 0;
         }
