@@ -89,8 +89,4 @@ class DepartmentServiceTest {
 
         assertEquals(expectedMap, actualNumberOfLectorsForEachDegree);
     }
-
-
-
-
 }
