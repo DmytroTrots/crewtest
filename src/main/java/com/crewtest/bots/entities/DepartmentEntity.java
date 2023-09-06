@@ -28,10 +28,11 @@ public class DepartmentEntity {
     )
     Set<LectorEntity> lectors = new HashSet<>();
 
-    public DepartmentEntity(Integer departmentId, String departmentName, String headOfDepartmentName) {
+    public DepartmentEntity(Integer departmentId, String departmentName, String headOfDepartmentName, Set<LectorEntity> lectors) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
         this.headOfDepartmentName = headOfDepartmentName;
+        this.lectors = lectors;
     }
 
     public DepartmentEntity() {
